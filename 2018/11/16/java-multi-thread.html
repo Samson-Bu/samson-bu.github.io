@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Java中的线程和锁 · Samson's Blog</title><meta name="description" content="Java中的线程和锁 - Samson Bu"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://samson-bu.github.io/atom.xml" title="Samson's Blog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/samson-bu/" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Java中的线程和锁</h1><div class="post-info">Nov 16, 2018</div><div class="post-content"><p>JVM支持多个线程的同时执行，它们独立地执行代码，操作保存在共享主存中的值和对象。多线程支持可以通过多个硬件处理器、单处理分时以及多处理器分时来实现。用户创建线程的唯一途径是实例化一个<code>Thread</code>类的对象，并通过<code>start()</code>方法来激活线程。如果未能正确的同步多线程，则它们的行为将可能是令人迷惑的，甚至是反直觉的。本章将介绍Java多线程程序的语义，它包含关于哪些变量是可见的（通过读被多个线程更新的共享内存）规则。<br>因为此规范类似于不同硬件体系结构的内存模型，语义也被称为是<em>Java编程语言内存模型</em>。语义并没有规定一个多线程程序是如何执行的，而是描述了该程序被允许出现的行为。一个只会残生被允许行为的执行策略是一个可接受的执行策略。</p>
+<a id="more"></a>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#synchronization">同步</a></li>
+<li><a href="#wsan">等待集和通知</a></li>
+<li><a href="#say">Sleep和Yield</a></li>
+<li><a href="#mm">内存模型</a></li>
+</ul>
+<h4 id="同步"><a href="#同步" class="headerlink" title=" 同步 "></a><span id="synchronization"> 同步 </span></h4><p>Java提供了多种方式供不同线程间通信，其中最基本的方法就是同步——使用监视器（monitor）实现。Java中的每个对象都关联了一个监视器，线程可以对监视器进行加锁（lock）和解锁（unlock）。同一时刻，某一监视器的锁只能被一个线程持有。此时，任何其他线程试图获取该锁时，都会导致线程阻塞，直到它能够获得监视器的锁。线程t可以对某一监视器多次加锁，每次解锁将只消除一次锁的效果。</p>
+<p><code>synchronized</code>语句会计算对某一对象的引用，然后尝试对该对象的监视器进行加锁操作，如果加锁成功才会进行进一步的动作。在加锁动作完成后，<code>synchronized</code>语句的主题部分才被执行。执行正常结束或者异常结束都会自动地对监视器执行解锁操作。</p>
+<p>当<code>synchronized</code>方法被调用时，它自动地执行加锁操作，它的主体部分在加锁操作成功完成后方可执行。如果该方法是个实例方法，则会对调用该方法的实例（也就是在执行该方法时，可以被认为是this的对象）的监视器进行加锁操作。如果是静态方法，则会对静态方法所在类的Class对象的监视器进行加锁操作。当被调用方法的主体执行完毕，不管是正常还是异常，会释放对应监视器的锁。</p>
+<p>Java既不能避免，也不要求死锁条件检测。如果需要的化，那些会直接或间接地持有对多个对象锁的程序需要使用传统的技术来避免思索的发生，或者创造高级的、不会死锁的locking primitives。其他像对<code>volatile</code>变量的读写、使用<code>java.util.concurrent</code>包中的类等机制，提供了其他可选的同步方式。</p>
+<h4 id="等待集和通知"><a href="#等待集和通知" class="headerlink" title=" 等待集和通知 "></a><span id="wsan"> 等待集和通知 </span></h4><p>除了监视器外，每个对象都关联了等待集（wait set）——线程组成的集合。对象被创建时，它的等待集为空。向等待集中添加或者删除线程的基本操作是原子性的（atomic）。仅可通过<code>Object.wait</code>、<code>Object.notify</code>和<code>Object.notifyAll</code>来操纵等待集。</p>
+<p>等待集的操作也会被线程的终端状态、<code>Thread</code>类中处理中断的方法所影响。而且<code>Thread</code>类中的sleeping和joining其他线程的方法具有哪些来自等待和通知行为的性质。</p>
+<blockquote>
+<p>Additionally, the <code>Thread</code> class’s methods for sleeping and joining other threads have properties<br>derived from those of wait and notification actions.</p>
+</blockquote>
+<p>等待动作（wait action)发生在<code>wait()</code>方法或者其带时间的形式<code>wait(long millisecs)</code>和<code>wait(long millisecs, int nanosecs)</code>被调用时。当带时间的<code>wait</code>的参数全部为0时，与调用<code>wait()</code>的效果相同。</p>
+<p>只有在未抛出<code>InterruptedException</code>异常时，才称线程从一个等待中正常返回。设线程t正在对象m上执行了<code>wait</code>方法，而且t在m上仍然有n个未解锁的lock动作，则会发生下面动作中的一种：</p>
+<ul>
+<li>如果n==0，即线程t不再拥有对象m的锁，抛出<code>IllegalMonitorStateException</code>异常</li>
+<li>如果调用的是带时间的<code>wait</code>方法，而且参数<code>nanosecs</code>不再0-999999范围内，或者<code>millisecs</code>参数为负数，则抛出<code>IllegalArgumentException</code>异常</li>
+<li>如果线程t被中断，则抛出<code>InterruptedException</code>，并设置t的中断状态为<code>false</code></li>
+<li><p>如果不是上述情况中的任意一种，则：</p>
+<ol>
+<li>线程t被加入到对象m的等待集中，并且在m上执行n次解锁动作</li>
+<li><p>线程t不会继续执行任何指令，直到它被从m的等待集中移除。移除的原因可能是下列任意一种：</p>
+<ul>
+<li>在m上执行了<code>notify</code>动作去移除t</li>
+<li>在m上执行<code>notifyAll</code>移除m等待集中所有的线程</li>
+<li>线程t发生了中断动作</li>
+<li>如果是带时间的<code>wait</code>，将线程t从m的等待集中移除的内部动作发生在从<code>wait</code>操作发生至少<code>millisecs</code>毫秒+<code>nanosecs</code>纳秒之后</li>
+<li>允许不同实现（implementation）去执行丰富的唤醒动作（spurious wake-ups），即从等待集中移除线程。因此，及时没有看到显式的指令去从等待集中移除线程，线程也有可能自动地从等待集中被移除。<blockquote>
+<p> An internal action by the implementation. Implementations are permitted, although not encouraged, to perform “spurious wake-ups”, that is, to remove threads from wait sets and thus enable resumption without explicit instructions to do so.</p>
+</blockquote>
+</li>
+</ul>
+<p>线程必须为导致其从等待集中被移除的事件确定一个顺序。这一顺序没有必要与其他的顺序一致，但是该线程却必须表现的好像那些事件是按那个顺序发生的。</p>
+<p>例如，如果线程t在对象m的等待集中，之后t的中断和m的通知同时发生，这两个事件间必须有一个顺序。如果中断被认为是首先发生的，则t最终会从<code>wait</code>中返回，并抛出<code>InterruptedException</code>异常，而且m的等待集中的其他线程（如果存在的话）也必须接受这一通知。如果通知被认为是首先发生的，则t最终会正常地从<code>wait</code>中返回，中断等待。</p>
+</li>
+<li>线程t在对象m上执行n次锁动作</li>
+<li>如果线程t因为中断而在步骤2中从m的等待集中被移除，则线程t的中断状态被设置为<code>false</code>，wait方法抛出<code>InterruptedException</code>异常</li>
+</ol>
+</li>
+</ul>
+<p>通知（notification）动作发生在<code>notify</code>、<code>notifyAll</code>方法被调用时。设t为在m对象上执行上述方法的线程，n为线程t在m上尚未被解锁动作matched的锁动作。下面的动作之一会发生：</p>
+<ul>
+<li>如果n==0，则抛出<code>IllegalMonitorStateException</code>异常，此时线程t已经不再拥有对象m的锁</li>
+<li>如果n&gt;0，而且通知动作由<code>notify</code>方法引起，则如果m的等待集非空，则等待集中的一个成员u被选中，并从该等待集中被移除。这里并没有保证那个线程会被选中。此时的通知将会使线程u的wait动作恢复。线程u在恢复上的锁动作不能成功，直到线程t完全解锁m的监视器一段时间后。</li>
+<li>如果n&gt;0，而且通知动作由<code>notifyAll</code>方法引起，则m等待集中所有的线程都被移除，并恢复执行。需要注意，在wait方法的恢复过程中，他们中只有一个能够获得m的监视器的锁。</li>
+</ul>
+<p>中断动作发生在调用<code>Thread.interrupt</code>方法和其他被定义用来调用它执行的方法，如<code>ThreadGroup.interrupt</code>方法。设t为调用u.interrupt方法的线程，t和u可以为同一个线程，将会导致线程u的中断状态设置为true。而且，如果存在对象m，它的等待集包含u，则u将被从m的等待集中移除。这将使得u恢复等待动作，在重新获得m的监视器锁后，wait动作将会抛出<code>InterruptedException</code>异常。</p>
+<p>调用<code>Thread.isInterrupted</code>方法可以确定一个线程的中断状态，静态方法<code>Thread.interrupted</code>可能会被线程调用去观察并清除它自己的中断状态。</p>
+<p>根据上面的规范描述，我们可以确定等待、通知、中断之间的交互关系：</p>
+<ul>
+<li>如果一个线程在等待的过程中同时被通知和中断，则会发生下述两种情况的一种：<ol>
+<li>从wait中正常返回，中断被挂起，即调用<code>Thread.interrupted</code>方法会返回<code>true</code></li>
+<li>从wait中返回，并抛出<code>InterruptedException</code>异常</li>
+</ol>
+</li>
+<li>线程有有可能不重置它的中断状态，并且正常地从对wait的调用中返回</li>
+<li>同样的，通知不能因为中断而丢失。假设s为对象m的等待集中线程的对象组成的集合，当其他的线程在m上执行<code>notify</code>时，会发生下述两种情况中的一种：<ol>
+<li>s中至少有一个线程必须正常地从<code>wait</code>返回</li>
+<li>s中所有的线程都必须退出<code>wait</code>，并抛出<code>InterruptedException</code>异常<br>注意：如果线程同时被中断和<code>notify</code>通知，则该线程从<code>wait</code>中返回并抛出<code>InterruptedException</code>异常，然后等待集合中的其他线程必须被通知。</li>
+</ol>
+</li>
+</ul>
+<h4 id="Sleep和Yield"><a href="#Sleep和Yield" class="headerlink" title=" Sleep和Yield "></a><span id="say"> Sleep和Yield </span></h4><p><code>Thread.sleep</code>导致当前正在执行的线程沉睡（临时地放弃执行）指定时间段，受制于系统计时器和调度器的精确度和准确度。线程不会失去对任何监视器的拥有权，执行的恢复将依赖于调度和处理器的可用性。需要注意的是，<code>Thread.sleep</code>和<code>Thread.yield</code>都没有任何同步语义。特别地，编译器没有必要在调用<code>Thread.sleep</code>或<code>Thread.yield</code>之前将缓存在寄存器中的写操作刷新到共享内存中，也没有必要在调用<code>Thread.sleep</code>或<code>Thread.yield</code>之后加载缓存在寄存器中的值。</p>
+<p>例如，考虑如下的代码片段，并假设<code>this.done</code>是一个非volatile布尔域<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (!<span class="keyword">this</span>.done)</span><br><span class="line">    Thread.sleep(<span class="number">1000</span>);</span><br></pre></td></tr></table></figure></p>
+<p>编译器可以只读取<code>this.done</code>变量一次，并且在每次循环时重用被缓存的值。这意味着循环可能永远不会停止，即使其他的线程改变了它的值。</p>
+<h4 id="内存模型"><a href="#内存模型" class="headerlink" title=" 内存模型 "></a><span id="mm"> 内存模型 </span></h4><p>给定一个程序和该程序的一个执行迹，内存模型描述了该迹是否是程序的一次合法执行。Java中内存模型的工作原理是：测试迹中的每个read，并根据特定的规则检查能被该read观察到的write是否是合法的。内存模型描述了程序的可能性为。只要是程序所有的执行结果都可以通过内存模型预测，则无论Java的实现是怎样都是可以的。（这允许Java的实现者去做大量的代码转换，包括动作重排、移除不必要的同步）</p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ol>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se8/jls8.pdf" target="_blank" rel="noopener">The Java Language Specification, Java SE 8 Edition</a></li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a href="/2018/11/26/browser-loading-process.html" class="prev">PREV</a><a href="/2018/11/14/enhancer.html" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2018 <a href="https://samson-bu.github.io">Samson Bu</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

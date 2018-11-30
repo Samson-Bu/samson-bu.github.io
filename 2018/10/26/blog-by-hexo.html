@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用Hexo框架 + Apollo主题 + Github Pages搭建静态博客 · Samson's Blog</title><meta name="description" content="使用Hexo框架 + Apollo主题 + Github Pages搭建静态博客 - Samson Bu"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://samson-bu.github.io/atom.xml" title="Samson's Blog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/samson-bu/" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">使用Hexo框架 + Apollo主题 + Github Pages搭建静态博客</h1><div class="post-info">Oct 26, 2018</div><div class="post-content"><p>本文主要介绍我搭建个人博客的步骤和用到的工具。我选择<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a>作为博客框架，使用Markdown解析文章，选择风格简洁的<a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank" rel="noopener">Apollo</a>作为博客主题。最后，我将生成的静态页面部署到Github中，借助Github Pages显示。</p>
+<a id="more"></a>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#hexo">Hexo框架</a> </li>
+<li><a href="#apollo">Apollo主题</a></li>
+<li><a href="#pages">Github Pages</a></li>
+</ul>
+<h4 id="Hexo框架"><a href="#Hexo框架" class="headerlink" title="Hexo框架"></a><span id="hexo">Hexo框架</span></h4><p>  Hexo框架需要以来以下程序:</p>
+<ul>
+<li><a href="https://nodejs.org" target="_blank" rel="noopener">node.js</a></li>
+<li><a href="http://git-scm.com/" target="_blank" rel="noopener">git</a></li>
+</ul>
+<p>如果您的电脑上已具备上述程序，则可以通过以下方式快速安装Hexo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
+<p>如果您的电脑上尚未安装上述程序，可参考<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">文章</a>中介绍的方法进行安装。</p>
+<p>安装完成后，可以通过<code>hexo --version</code>检查Hexo是否安装正确以及当前的版本。</p>
+<p>Hexo安装成功后，通过下列命令可以创建一个站点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init blog // 将创建一个名为blog的文件夹，并进行适当的初始化</span><br></pre></td></tr></table></figure></p>
+<p>blog文件夹中的文件结构如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml</span><br><span class="line">├── node_modules</span><br><span class="line">├── package.json</span><br><span class="line">├── scaffolds</span><br><span class="line">├── source</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">└── themes</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>_config.yml</code>包含网站的配置信息；</li>
+<li><code>package.json</code>和<code>node_modules</code>包含项目的依赖信息以及依赖模块；</li>
+<li><code>scaffolds</code>为模板文件夹，新建文章时，Hexo将根据scaffolds中的模板来建立文件；</li>
+<li><code>source</code>存放用户资源，除<code>_posts</code>文件夹之外，开头命名为<code>_</code>(下划线)的文件 / 文件夹和隐藏的文件将会被忽略，Markdown和HTML文件会被解析并放到<code>public</code>文件夹（可以在<code>_config.yml</code>中进行配置），而其他文件会被拷贝过去；</li>
+<li><code>themes</code>主题文件夹，用来存放网站使用的主题文件，Hexo根据这些主题生成静态页面。</li>
+</ul>
+<p>新建站点后，使用<code>new</code>命令可以新建一片文章：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure></p>
+<p>文章编辑完成后，使用<code>generate</code>命令，Hexo可以生成静态页面：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure></p>
+<p>持续更新中…<br>预览生成的静态页面，可以使用过<code>server</code>命令启动服务器，用浏览器访问<code>logcalhost:4000</code>进行页面预览：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
+<h4 id="Apollo主题"><a href="#Apollo主题" class="headerlink" title="Apollo主题"></a><span id="apollo">Apollo主题</span></h4><p>这里我选择<a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank" rel="noopener">Apollo</a>作为博客的主题，主要原因是风格比较简约。<br>首先进入到要使用该主题的站点中，然后安装依赖模块，最后下载Apollo主题到<code>themes</code>文件中并在<code>_config.yml</code>中启用对该主题的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cd blog_folder</span><br><span class="line">npm install --save hexo-renderer-jade hexo-generator-feed hexo-generator-sitemap hexo-browsersync hexo-generator-archive  // 安装依赖模块</span><br><span class="line">git clone https://github.com/pinggod/hexo-theme-apollo.git themes/apollo // 下载主题</span><br><span class="line">修改_config.yml中的配置，将theme项的值修改为apollo：</span><br><span class="line">theme: apollo</span><br><span class="line"></span><br><span class="line"># 在归档页面显示所有文章</span><br><span class="line"># 需要上面安装的 hexo-generator-archive 插件支持</span><br><span class="line">archive_generator:</span><br><span class="line">  per_page: 0</span><br><span class="line">  yearly: false</span><br><span class="line">  monthly: false</span><br><span class="line">  daily: false</span><br></pre></td></tr></table></figure>
+<p>之后重新生成静态页面，启动服务器进行预览，可以看到主题更新后的效果。如果不能正常预览，请自行百度解决。</p>
+<h4 id="将博客部署到Github-Pages"><a href="#将博客部署到Github-Pages" class="headerlink" title="将博客部署到Github Pages"></a><span id="pages">将博客部署到Github Pages</span></h4><p><a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a>是本来是用于展示托管在Github上的项目。不过，因为它提供了免费且稳定的空间，也可以用来搭建个人博客。而且Github允许用户创建一个特殊的仓库<code>username.github.io</code> 用来存储个人主页，而且提供域名解析服务，使用浏览器访问<code>username.github.io</code>即可访问个人主页。</p>
+<div class="tip"><br>  个人主页必须在master分支下，而且如果项目名称为user_name.github.io这种格式，则所显示的静态页面信息也必须在master分之下的主目录中才可以。<br></div>
+
+<blockquote>
+<p>If your site is a User or Organization Page that has a repository named <code>username.github.io</code> or <code>orgname.github.io</code> , you cannot publish your site’s source files from different locations. User and Organization Pages that have this type of repository name are only published from the <code>master</code> branch.</p>
+</blockquote>
+<ul>
+<li>在Github中创建名为<code>username.github.io</code>的项目；</li>
+<li><p>修改站点中的配置<code>_config.yml</code>；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/***  # 项目的实际地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>hexo deploy</code>命令即可将项目部署到Github中，部署过程中可能需要根据提示输入Github的账户用户名和密码等信息。</p>
+</li>
+</ul>
+<div class="tip"><br>  使用git将站点部署到Github需要提前安装一个扩展： <code>npm install hexo-deployer-git --save</code><br></div>
+
+<p>至此，搭建博客的配置过程基本完成。之后再写文章只需要使用<code>new</code>命令新建文章，编写完成后使用<code>deploy</code>命令部署即可。</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p><strong>待补充</strong></p>
+<ul>
+<li>Github Keys</li>
+<li>绑定独立域名</li>
+<li>使用图床</li>
+<li>添加插件</li>
+<li>添加404</li>
+<li>添加支付宝捐赠按钮</li>
+</ul>
+<p><strong>参考</strong></p>
+<ol>
+<li><a href="https://www.cnblogs.com/dushao/p/5999593.html" target="_blank" rel="noopener">杜少博客</a></li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a href="/2018/10/26/markdown.html" class="prev">PREV</a></div><div class="copyright"><p>© 2015 - 2018 <a href="https://samson-bu.github.io">Samson Bu</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
