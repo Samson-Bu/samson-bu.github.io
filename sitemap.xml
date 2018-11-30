@@ -2,37 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://samson-bu.github.io/2018/11/26/browser-loading-process.html</loc>
+    <loc>https://samson-bu.github.io/2018/11/01/java-execution.html</loc>
     
-    <lastmod>2018-11-30T01:44:25.792Z</lastmod>
+    <lastmod>2018-11-30T06:35:08.725Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://samson-bu.github.io/2018/11/16/java-multi-thread.html</loc>
+    <loc>https://samson-bu.github.io/categories/index.html</loc>
     
-    <lastmod>2018-11-30T01:16:27.303Z</lastmod>
+    <lastmod>2018-11-30T06:15:28.091Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://samson-bu.github.io/2018/11/26/browser-loading-process.html</loc>
+    
+    <lastmod>2018-11-30T06:03:37.761Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://samson-bu.github.io/2018/10/26/blog-by-hexo.html</loc>
+    
+    <lastmod>2018-11-30T05:49:24.850Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://samson-bu.github.io/2018/10/26/markdown.html</loc>
     
-    <lastmod>2018-11-26T02:10:44.173Z</lastmod>
+    <lastmod>2018-11-30T05:48:44.401Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://samson-bu.github.io/2018/10/30/java-singleton.html</loc>
     
-    <lastmod>2018-11-26T02:10:44.172Z</lastmod>
+    <lastmod>2018-11-30T05:48:34.071Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://samson-bu.github.io/2018/11/01/java-execution.html</loc>
+    <loc>https://samson-bu.github.io/2018/11/16/java-multi-thread.html</loc>
     
-    <lastmod>2018-11-26T02:10:44.168Z</lastmod>
+    <lastmod>2018-11-30T05:48:19.247Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://samson-bu.github.io/tags/index.html</loc>
+    
+    <lastmod>2018-11-30T02:38:09.488Z</lastmod>
     
   </url>
   
@@ -40,13 +61,6 @@
     <loc>https://samson-bu.github.io/2018/11/14/enhancer.html</loc>
     
     <lastmod>2018-11-26T02:10:44.167Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://samson-bu.github.io/2018/10/26/blog-by-hexo.html</loc>
-    
-    <lastmod>2018-11-26T02:10:44.165Z</lastmod>
     
   </url>
   
