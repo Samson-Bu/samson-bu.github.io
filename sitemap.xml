@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://localhost:8080/</loc>
+        <loc>https://samson-bu.github.io/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/blogs/</loc>
+        <loc>https://samson-bu.github.io/blogs/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/</loc>
+        <loc>https://samson-bu.github.io/blogs/test/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/linking/</loc>
+        <loc>https://samson-bu.github.io/content/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/multilingual/</loc>
+        <loc>https://samson-bu.github.io/content/linking/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/overview/</loc>
+        <loc>https://samson-bu.github.io/content/multilingual/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/page/</loc>
+        <loc>https://samson-bu.github.io/content/overview/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/sass/</loc>
+        <loc>https://samson-bu.github.io/content/page/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/search/</loc>
+        <loc>https://samson-bu.github.io/content/sass/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/section/</loc>
+        <loc>https://samson-bu.github.io/content/search/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/shortcodes/</loc>
+        <loc>https://samson-bu.github.io/content/section/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/syntax-highlighting/</loc>
+        <loc>https://samson-bu.github.io/content/shortcodes/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/table-of-contents/</loc>
+        <loc>https://samson-bu.github.io/content/syntax-highlighting/</loc>
     </url>
     <url>
-        <loc>https://localhost:8080/content/taxonomies/</loc>
+        <loc>https://samson-bu.github.io/content/table-of-contents/</loc>
+    </url>
+    <url>
+        <loc>https://samson-bu.github.io/content/taxonomies/</loc>
     </url>
 </urlset>
