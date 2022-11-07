@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://localhost:8080/main.css">
+    <link rel="icon" href="https://www.getzola.org/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Docs | Search </title>
+</head>
+<body>
+
+<script>
+        fetch('https://api.github.com/repos/getzola/zola/releases/latest')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                let release_name = data.name;
+                let html_url = data.html_url;
+                release.innerHTML = `<a href='${html_url}'>${release_name}</a>`;
+            });
+    </script>
+<main>
+    
+    <nav>
+            <a href="https:&#x2F;&#x2F;localhost:8080">
+                        <img src="https://easydocs.codeandmedia.com/logo.svg" alt="logo"/>
+                    </a>
+                <div id="release"></div>
+            <a href="javascript:void(0);" onclick="burger()" id="mobile" class="ms-Icon--GlobalNavButton"></a>
+            <div id="trees">
+                <input class="tree-toggle" type="checkbox" id="index"
+                           />
+                    <label class="tree-toggle-label"
+                           for="index">index</label>
+
+                    <ul class="subtree">
+                        </ul>
+                <input class="tree-toggle" type="checkbox" id="content"
+                           checked/>
+                    <label class="tree-toggle-label"
+                           for="content">Content</label>
+
+                    <ul class="subtree">
+                        <li >
+                                <a href="https://localhost:8080/content/overview/">Overview</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/section/">Section</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/page/">Page</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/shortcodes/">Shortcodes</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/linking/">Internal links &amp; deep linking</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/table-of-contents/">Table of Contents</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/syntax-highlighting/">Syntax Highlighting</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/taxonomies/">Taxonomies</a>
+                            </li>
+
+                            <li class="active">
+                                <a href="https://localhost:8080/content/search/">Search</a>
+                            </li>
+
+                            
+                                    
+                                    
+                                        <li >
+                                <a href="https://localhost:8080/content/sass/">Sass</a>
+                            </li>
+
+                            <li >
+                                <a href="https://localhost:8080/content/multilingual/">Multilingual sites</a>
+                            </li>
+
+                            </ul>
+                </div>
+        </nav>
+    <article>
+
+        <div id="on_right">
+                <span id="search-ico" class="ms-Icon--Search"></span>
+            </div>
+            <div class="search-container">
+                <input id="search" type="search" placeholder="Search as you type...">
+                <div class="search-results">
+                    <div class="search-results__header"></div>
+                    <ul class="search-results__items"></ul>
+                </div>
+            </div>
+        <div id="wrap">
+            
+        <p>Zola can build a search index from the sections and pages content to
+be used by a JavaScript library such as <a href="http://elasticlunr.com/">elasticlunr</a>.</p>
+<p>To enable it, you only need to set <code>build_search_index = true</code> in your <code>config.toml</code> and Zola will
+generate an index for the <code>default_language</code> set for all pages not excluded from the search index.</p>
+<p>It is very important to set the <code>default_language</code> in your <code>config.toml</code> if you are writing a site not in
+English; the index building pipelines are very different depending on the language.</p>
+<p>After <code>zola build</code> or <code>zola serve</code>, you should see two files in your static directory:</p>
+<ul>
+<li><code>search_index.${default_language}.js</code>: so <code>search_index.en.js</code> for a default setup</li>
+<li><code>elasticlunr.min.js</code></li>
+</ul>
+<p>As each site will be different, Zola makes no assumptions about your search function and doesn't provide
+the JavaScript/CSS code to do an actual search and display results. You can look at how this site
+implements it to get an idea: <a href="https://github.com/getzola/zola/tree/master/docs/static/search.js">search.js</a>.</p>
+<h2 id="configuring-the-search-index">Configuring the search index&nbsp;<a class="anchor" href="#configuring-the-search-index">&#xE732;</a></h2>
+<p>In some cases, the default indexing strategy is not suitable. You can customise which fields to include and whether
+to truncate the content in the </p>
+
+    
+        </div>
+
+    </article>
+</main>
+
+
+    <script type="text/javascript" src="https://localhost:8080/elasticlunr.min.js" defer></script>
+    <script type="text/javascript" src="https://localhost:8080/search_index.en.js" defer></script>
+    <script type="text/javascript" src="https://localhost:8080/js.js" defer></script>
+</body>
+</html>
